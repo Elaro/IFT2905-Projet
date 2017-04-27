@@ -61,5 +61,8 @@ public class BixiFragment extends Fragment implements View.OnClickListener{
                 bixiListButton.setImageResource(R.drawable.ic_list_black_24px);
             }
         }
+        if(v == bixiLocate){
+            //call map methods
+        }
     }
 }

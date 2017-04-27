@@ -34,18 +34,11 @@
 
     </LinearLayout>
 
-    <fragment
-        android:id="@+id/docksmapView"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    <FrameLayout
+        android:id="@+id/docks_content_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:apiKey = "@string/mapskey"
-        android:clickable = "true"
-        tools:context="com.example.francoisluc.ift2905_projet.MainActivity" />
+        android:layout_weight="1">
 
-    <ListView
-        android:id="@+id/dockslistView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="invisible" />
+    </FrameLayout>
 </LinearLayout>

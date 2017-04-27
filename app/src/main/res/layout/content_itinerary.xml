@@ -27,13 +27,12 @@
         android:contentDescription="@string/itinerary_button"
         app:srcCompat="@drawable/ic_search_black_24px" />
 
-    <fragment
-        android:id="@+id/itinerarymapView"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    <FrameLayout
+        android:id="@+id/itinerary_content_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:apiKey = "@string/mapskey"
-        android:clickable = "true"
-        tools:context="com.example.francoisluc.ift2905_projet.MainActivity" />
+        android:layout_weight="1">
+
+    </FrameLayout>
 
 </LinearLayout>

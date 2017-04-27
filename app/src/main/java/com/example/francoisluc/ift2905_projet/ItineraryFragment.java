@@ -3,6 +3,7 @@ package com.example.francoisluc.ift2905_projet;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +17,11 @@ import com.google.android.gms.maps.MapView;
  * Created by François Luc on 2017-04-26.
  */
 
-public class ItineraryFragment extends Fragment {
+public class ItineraryFragment extends Fragment implements View.OnClickListener{
     EditText itinStartLocation, itinDestLocation;
     ImageButton itinerary;
-    MapView itineraryMapView;
+    MapFragment mapFrag;
+    FragmentManager fragmentManager;
 
     public ItineraryFragment()
     {
@@ -30,11 +32,19 @@ public class ItineraryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.content_itinerary, container, false);
+        mapFrag = new MapFragment();
+        itinStartLocation = (EditText) v.findViewById(R.id.starttextView);
+        itinDestLocation = (EditText) v.findViewById(R.id.desttextView);
+        itinerary = (ImageButton) v.findViewById(R.id.itinerarybutton);
+        itinerary.setOnClickListener(this);
 
-        itinStartLocation = (EditText) container.findViewById(R.id.starttextView);
-        itinDestLocation = (EditText) container.findViewById(R.id.desttextView);
-        itinerary = (ImageButton) container.findViewById(R.id.itinerarybutton);
-        itineraryMapView = (MapView) container.findViewById(R.id.itinerarymapView);
+        fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.itinerary_content_frame, mapFrag).commit();
         return v;
+    }
+
+    @Override
+    public void onClick(View v) {
+        //call map method
     }
 }
