@@ -11,12 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
 
 import com.example.francoisluc.ift2905_projet.Database.StationsDB;
-import com.google.android.gms.maps.MapView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         mainhost.getTabAt(0).setIcon(R.drawable.ic_bicycle_pictogram);
         mainhost.getTabAt(1).setIcon(R.drawable.ic_docks_30px);
         mainhost.getTabAt(2).setIcon(R.drawable.ic_road_with_two_placeholders);
-
 
     }
 
