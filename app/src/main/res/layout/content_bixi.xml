@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
@@ -41,12 +43,14 @@
         android:layout_height="match_parent"
         android:visibility="invisible" />
 
-    <com.google.android.gms.maps.MapView
+    <fragment
         android:id="@+id/biximapView"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
+        android:layout_height="match_parent"
+        android:apiKey = "@string/mapskey"
+        android:clickable = "true"
+        tools:context="com.example.francoisluc.ift2905_projet.MainActivity" />
 
 
 </LinearLayout>

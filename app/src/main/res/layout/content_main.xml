@@ -18,7 +18,6 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent">
 
-
     </android.support.design.widget.TabLayout>
 
     <view
@@ -38,6 +37,8 @@
         android:layout_height="match_parent"
         android:apiKey = "@string/mapskey"
         android:clickable = "true"
+        android:layout_below="@id/tab_layout"
+        android:layout_alignEnd="@id/pager"
         tools:context="com.example.francoisluc.ift2905_projet.MainActivity" />
 
 
