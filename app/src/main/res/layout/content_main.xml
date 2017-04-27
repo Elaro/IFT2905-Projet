@@ -31,4 +31,14 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tab_layout" />
 
+    <fragment
+        android:id="@+id/mapView"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:apiKey = "@string/mapskey"
+        android:clickable = "true"
+        tools:context="com.example.francoisluc.ift2905_projet.MainActivity" />
+
+
 </RelativeLayout>

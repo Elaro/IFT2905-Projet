@@ -15,4 +15,6 @@
     <string name="start_tooltip">Enter starting position here</string>
     <string name="dest_tooltip">Enter destination here</string>
 
+    <string name="mapskey">AIzaSyDehX119pWoj_Vl75sSFLKAcM150q4wVb8</string>
+
 </resources>
