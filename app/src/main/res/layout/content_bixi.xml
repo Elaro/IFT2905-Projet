@@ -36,13 +36,6 @@
 
     </LinearLayout>
 
-
-    <ListView
-        android:id="@+id/bixilistView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="invisible" />
-
     <fragment
         android:id="@+id/biximapView"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -52,5 +45,10 @@
         android:clickable = "true"
         tools:context="com.example.francoisluc.ift2905_projet.MainActivity" />
 
+    <ListView
+        android:id="@+id/bixilistView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible" />
 
 </LinearLayout>
