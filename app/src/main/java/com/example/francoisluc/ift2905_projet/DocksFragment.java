@@ -62,7 +62,7 @@ public class DocksFragment extends Fragment implements View.OnClickListener {
             }
         }
         if(v == docksLocate){
-            //call map methods
+            myGMapFragmentD.findAddress(docksLocation.getText().toString());
         }
     }
 }

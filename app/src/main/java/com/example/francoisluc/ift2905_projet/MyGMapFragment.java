@@ -1,20 +1,30 @@
 package com.example.francoisluc.ift2905_projet;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 
 public class MyGMapFragment extends Fragment implements OnMapReadyCallback {
@@ -44,8 +54,28 @@ public class MyGMapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
+        map.getUiSettings().setMapToolbarEnabled(false);
         //add marker here
         new AddMarker().execute();
+
+    }
+
+    public void findAddress(String address){
+        Geocoder geocoder = new Geocoder(getContext(), Locale.CANADA_FRENCH);
+        try {
+            List<Address> result = geocoder.getFromLocationName(address, 1);
+            if(result == null || result.isEmpty());
+            else{
+                Address a = result.get(0);
+                map.addMarker(new MarkerOptions()
+                        .position(new LatLng(a.getLatitude(),a.getLongitude()))
+                        .title("Me")
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(a.getLatitude(),a.getLongitude()), 17));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 

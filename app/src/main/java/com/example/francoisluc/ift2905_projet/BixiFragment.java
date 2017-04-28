@@ -62,7 +62,7 @@ public class BixiFragment extends Fragment implements View.OnClickListener{
             }
         }
         if(v == bixiLocate){
-            //call map methods
+                myGMapFragment.findAddress(bixiLocation.getText().toString());
         }
     }
 }
