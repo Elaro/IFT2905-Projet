@@ -18,7 +18,7 @@ public class DocksFragment extends Fragment implements View.OnClickListener {
     EditText docksLocation;
     ImageButton docksLocate, docksListButton;
     boolean showingDocksMap;
-    MapFragment mapFragmentD;
+    MyGMapFragment myGMapFragmentD;
     ResultsListFragment resultsListFragmentD;
     FragmentManager fragmentManager;
 
@@ -32,7 +32,7 @@ public class DocksFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.content_docks, container, false);
-        mapFragmentD = new MapFragment();
+        myGMapFragmentD = new MyGMapFragment();
         resultsListFragmentD = new ResultsListFragment();
         docksLocation = (EditText) view.findViewById(R.id.dockslocationtextView);
         docksLocate = (ImageButton) view.findViewById(R.id.docksbutton);
@@ -42,7 +42,7 @@ public class DocksFragment extends Fragment implements View.OnClickListener {
         showingDocksMap=true;
 
         fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.docks_content_frame, mapFragmentD).commit();
+        fragmentManager.beginTransaction().replace(R.id.docks_content_frame, myGMapFragmentD).commit();
 
         return view;
     }
@@ -56,7 +56,7 @@ public class DocksFragment extends Fragment implements View.OnClickListener {
                 docksListButton.setImageResource(R.drawable.ic_map_black_24px);
             }
             else{
-                fragmentManager.beginTransaction().replace(R.id.docks_content_frame, mapFragmentD).commit();
+                fragmentManager.beginTransaction().replace(R.id.docks_content_frame, myGMapFragmentD).commit();
                 showingDocksMap = true;
                 docksListButton.setImageResource(R.drawable.ic_list_black_24px);
             }

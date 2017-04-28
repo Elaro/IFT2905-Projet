@@ -18,7 +18,7 @@ public class BixiFragment extends Fragment implements View.OnClickListener{
     EditText bixiLocation;
     ImageButton bixiLocate, bixiListButton;
     boolean showingBixiMap;
-    MapFragment mapFragment;
+    MyGMapFragment myGMapFragment;
     ResultsListFragment resultsListFragment;
     FragmentManager fragmentManager;
 
@@ -31,7 +31,7 @@ public class BixiFragment extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.content_bixi, container, false);
-        mapFragment = new MapFragment();
+        myGMapFragment = new MyGMapFragment();
         resultsListFragment = new ResultsListFragment();
         bixiLocation = (EditText) v.findViewById(R.id.bixilocationtextView);
         bixiLocate = (ImageButton) v.findViewById(R.id.bixibutton);
@@ -42,7 +42,7 @@ public class BixiFragment extends Fragment implements View.OnClickListener{
 
 
         fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.bixi_content_frame, mapFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.bixi_content_frame, myGMapFragment).commit();
 
         return v;
     }
@@ -56,7 +56,7 @@ public class BixiFragment extends Fragment implements View.OnClickListener{
                 bixiListButton.setImageResource(R.drawable.ic_map_black_24px);
             }
             else{
-                fragmentManager.beginTransaction().replace(R.id.bixi_content_frame, mapFragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.bixi_content_frame, myGMapFragment).commit();
                 showingBixiMap = true;
                 bixiListButton.setImageResource(R.drawable.ic_list_black_24px);
             }

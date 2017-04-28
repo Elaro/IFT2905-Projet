@@ -7,11 +7,8 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-
-import com.google.android.gms.maps.MapView;
 
 /**
  * Created by François Luc on 2017-04-26.
@@ -20,7 +17,7 @@ import com.google.android.gms.maps.MapView;
 public class ItineraryFragment extends Fragment implements View.OnClickListener{
     EditText itinStartLocation, itinDestLocation;
     ImageButton itinerary;
-    MapFragment mapFrag;
+    MyGMapFragment mapFrag;
     FragmentManager fragmentManager;
 
     public ItineraryFragment()
@@ -32,7 +29,7 @@ public class ItineraryFragment extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.content_itinerary, container, false);
-        mapFrag = new MapFragment();
+        mapFrag = new MyGMapFragment();
         itinStartLocation = (EditText) v.findViewById(R.id.starttextView);
         itinDestLocation = (EditText) v.findViewById(R.id.desttextView);
         itinerary = (ImageButton) v.findViewById(R.id.itinerarybutton);

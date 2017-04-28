@@ -91,8 +91,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    protected void StartActivity(Class<?> cls) {
-        Intent intent = new Intent(this, cls);
-        this.startActivity(intent);
-    }
 }

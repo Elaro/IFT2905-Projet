@@ -18,6 +18,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * Created by a on 2017-04-24.
  */
 
+/***************************************
+ *
+ * WARNING: this class isn't used anymore
+ * see MyGMapFragment for google map
+ *
+ ****************************************/
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap myMap;

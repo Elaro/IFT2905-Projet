@@ -2,8 +2,6 @@ package com.example.francoisluc.ift2905_projet;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.widget.ListViewAutoScrollHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +9,6 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-/**
- * Created by Rosalie on 2017-04-27.
- */
 
 public class ResultsListFragment extends Fragment {
 
