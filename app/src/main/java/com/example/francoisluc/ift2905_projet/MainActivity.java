@@ -47,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
 
     public class PagerAdapter extends FragmentPagerAdapter {
 
+        BixiFragment bixiFragment;
+        DocksFragment docksFragment;
+        ItineraryFragment itineraryFragment;
+
         public PagerAdapter(FragmentManager fm){
             super(fm);
         }
@@ -54,9 +58,18 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position){
             switch(position) {
-                case 0:return new BixiFragment();
-                case 1:return new DocksFragment();
-                case 2:return new ItineraryFragment();
+                case 0:
+                    if(bixiFragment == null)
+                        bixiFragment=new BixiFragment();
+                    return bixiFragment;
+                case 1:
+                    if(docksFragment == null)
+                        docksFragment= new DocksFragment();
+                    return docksFragment;
+                case 2:
+                    if(itineraryFragment == null)
+                        itineraryFragment=new ItineraryFragment();
+                    return itineraryFragment;
                 default:return null;
             }
         }
