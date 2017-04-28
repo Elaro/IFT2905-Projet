@@ -15,7 +15,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
@@ -23,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -30,6 +34,7 @@ import java.util.Locale;
 public class MyGMapFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap map;
+    private ArrayList<Marker> markers = new ArrayList<>();
 
     public MyGMapFragment() {
     }
@@ -79,6 +84,20 @@ public class MyGMapFragment extends Fragment implements OnMapReadyCallback {
 
     }
 
+    public ArrayList<Station> getStationList(){
+        ArrayList<Station> stations = new ArrayList<>();
+        LatLngBounds latLongBounds = map.getProjection().getVisibleRegion().latLngBounds;
+
+        for(int i = 0; i < markers.size(); i++){
+            Marker m = markers.get(i);
+            if(latLongBounds.contains(m.getPosition())){
+                Station s =  (Station)m.getTag();
+                stations.add(s);
+            }
+        }
+        return stations;
+    }
+
 
     private class AddMarker extends AsyncTask<Void, Void, String>{
 
@@ -98,18 +117,22 @@ public class MyGMapFragment extends Fragment implements OnMapReadyCallback {
                 for(int i = 0; i < jsonStationArray.length(); i++){
                     JSONObject stationI = jsonStationArray.getJSONObject(i);
 
-                    //int sId = stationI.getInt("id");
+                    int sId = stationI.getInt("id");
                     String sName = stationI.getString("s");
-                    // int sStatus = stationI.getInt("st");
+                    int sStatus = stationI.getInt("st");
                     double sLat = stationI.getDouble("la");
                     double sLon = stationI.getDouble("lo");
-                    //int sNbBixi = stationI.getInt("ba");
-                    //int sNbDock = stationI.getInt("da");
+                    int sNbBixi = stationI.getInt("ba");
+                    int sNbDock = stationI.getInt("da");
 
-                    map.addMarker(new MarkerOptions()
-                            .position(new LatLng(sLat,sLon))
-                            .title(sName));
+                    Station st = new Station(sId, sName, sStatus, sLat, sLon, sNbBixi, sNbDock);
 
+                    Marker m = map.addMarker(new MarkerOptions()
+                                .position(new LatLng(sLat,sLon))
+                                .title(sName));
+                    m.setTag(st);
+
+                    markers.add(m);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
