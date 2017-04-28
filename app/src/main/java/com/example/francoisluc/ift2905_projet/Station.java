@@ -9,12 +9,12 @@ public class Station {
     private int id;
     private String name;
     private int status;
-    private long latitude;
-    private long longitude;
+    private double latitude;
+    private double longitude;
     private int nbBixis;
     private int nbDocks;
 
-    public Station(int id, String name, int status, long lat, long lon, int bixi, int dock){
+    public Station(int id, String name, int status, double lat, double lon, int bixi, int dock){
         this.id = id;
         this.name = name;
         this.status = status;
@@ -39,11 +39,11 @@ public class Station {
         return status;
     }
 
-    public long getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public long getLongitude() {
+    public double getLongitude() {
        return longitude;
     }
 

@@ -37,6 +37,23 @@ public class JsonHelper {
         return res;
     }
 
+    /*
+    public JSONArray getStationArray() {
+        JSONArray result = null;
+        HttpHandler sh = new HttpHandler();
+        String jsonStr = sh.makeServiceCall(source);
+        if (jsonStr != null) {
+            try {
+                JSONObject fullJSON = new JSONObject(jsonStr);
+                result = fullJSON.getJSONArray("stations");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return  result;
+    }
+    */
+
     public ArrayList<Station> getStationAtLatLon(long latmax, long latmin, long lonmax, long lonmin){
         ArrayList<Station> res = null;
         try {
@@ -69,8 +86,8 @@ public class JsonHelper {
                             int sId = stationI.getInt("id");
                             String sName = stationI.getString("s");
                             int sStatus = stationI.getInt("st");
-                            int sLat = stationI.getInt("la");
-                            int sLon = stationI.getInt("lo");
+                            double sLat = stationI.getDouble("la");
+                            double sLon = stationI.getDouble("lo");
                             int sNbBixi = stationI.getInt("ba");
                             int sNbDock = stationI.getInt("da");
 

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,6 @@ public class BixiFragment extends Fragment implements View.OnClickListener{
         bixiListButton = (ImageButton) v.findViewById(R.id.bixilistbutton);
         bixiListButton.setOnClickListener(this);
         showingBixiMap=true;
-
 
         fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.bixi_content_frame, myGMapFragment).commit();
