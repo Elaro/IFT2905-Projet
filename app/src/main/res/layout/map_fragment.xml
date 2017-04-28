@@ -3,9 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
     <fragment
+        xmlns:map="http://schemas.android.com/apk/res-auto"
         android:id="@+id/mapF"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        class="com.google.android.gms.maps.SupportMapFragment">
+        class="com.google.android.gms.maps.SupportMapFragment"
+        map:mapType="normal"
+        map:uiZoomControls="true"
+        map:cameraTargetLat="45.5088400"
+        map:cameraTargetLng="-73.5878100"
+        map:cameraZoom="11"
+        >
     </fragment>
 </FrameLayout>

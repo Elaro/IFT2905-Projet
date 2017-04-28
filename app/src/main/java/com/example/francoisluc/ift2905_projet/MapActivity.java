@@ -31,9 +31,9 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_bixi);
-        setContentView(R.layout.content_docks);
-        setContentView(R.layout.content_itinerary);
+        //setContentView(R.layout.content_bixi);
+        //setContentView(R.layout.content_docks);
+        //setContentView(R.layout.content_itinerary);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
