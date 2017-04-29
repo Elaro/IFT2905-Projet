@@ -20,6 +20,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.ui.IconGenerator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -99,22 +100,19 @@ public class MyGMapFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
-    private class AddMarker extends AsyncTask<Void, Void, String>{
+    private class AddMarker extends AsyncTask<Void, Station, Void>{
 
         @Override
-        protected String doInBackground(Void... params) {
+        protected Void doInBackground(Void... params) {
             HttpHandler sh = new HttpHandler();
             String jsonStr = sh.makeServiceCall("https://secure.bixi.com/data/stations.json");
-            return jsonStr;
-        }
 
-        @Override
-        protected  void onPostExecute(String json) {
             try {
-                JSONObject fullJSON = new JSONObject(json);
+                JSONObject fullJSON = new JSONObject(jsonStr);
                 JSONArray jsonStationArray = fullJSON.getJSONArray("stations");
 
                 for(int i = 0; i < jsonStationArray.length(); i++){
+
                     JSONObject stationI = jsonStationArray.getJSONObject(i);
 
                     int sId = stationI.getInt("id");
@@ -126,17 +124,34 @@ public class MyGMapFragment extends Fragment implements OnMapReadyCallback {
                     int sNbDock = stationI.getInt("da");
 
                     Station st = new Station(sId, sName, sStatus, sLat, sLon, sNbBixi, sNbDock);
-
-                    Marker m = map.addMarker(new MarkerOptions()
-                                .position(new LatLng(sLat,sLon))
-                                .title(sName));
-                    m.setTag(st);
-
-                    markers.add(m);
+                    publishProgress(st);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Station ... st){
+            super.onProgressUpdate(st);
+            IconGenerator iconFactory = new IconGenerator(getContext());
+            iconFactory.setStyle(IconGenerator.STYLE_GREEN);
+
+            Station s = st[0];
+
+            Marker m = map.addMarker(new MarkerOptions()
+                    .icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon("" + s.getNbBixis())))
+                    .position(new LatLng(s.getLatitude(),s.getLongitude()))
+                    .title(s.getName()));
+            m.setTag(st);
+
+            markers.add(m);
+
+        }
+
+        @Override
+        protected  void onPostExecute(Void v) {
 
         }
     }
