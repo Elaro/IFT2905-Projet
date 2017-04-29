@@ -1,5 +1,6 @@
 package com.example.francoisluc.ift2905_projet;
 
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
@@ -9,13 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -65,6 +64,7 @@ public class MyGMapFragment extends Fragment implements OnMapReadyCallback {
         new AddMarker().execute();
 
     }
+
 
     public void findAddress(String address){
         Geocoder geocoder = new Geocoder(getContext(), Locale.CANADA_FRENCH);
@@ -136,9 +136,15 @@ public class MyGMapFragment extends Fragment implements OnMapReadyCallback {
         protected void onProgressUpdate(Station ... st){
             super.onProgressUpdate(st);
             IconGenerator iconFactory = new IconGenerator(getContext());
-            iconFactory.setStyle(IconGenerator.STYLE_GREEN);
+            Drawable drawable;
 
             Station s = st[0];
+            if(s.getNbBixis() == 0)
+                drawable = getContext().getResources().getDrawable(R.drawable.ic_bixi_marker_red);
+            else
+                drawable = getContext().getResources().getDrawable(R.drawable.ic_bixi_marker_green);
+
+            iconFactory.setBackground(drawable);
 
             Marker m = map.addMarker(new MarkerOptions()
                     .icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon("" + s.getNbBixis())))
