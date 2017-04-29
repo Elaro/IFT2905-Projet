@@ -1,10 +1,13 @@
 package com.example.francoisluc.ift2905_projet;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Rosalie on 2017-04-07.
  */
 
-public class Station {
+public class Station implements Parcelable{
 
     private int id;
     private String name;
@@ -54,4 +57,42 @@ public class Station {
     public int getNbDocks() {
         return nbDocks;
     }
+
+
+    public Station(Parcel in){
+        this.id = in.readInt();
+        this.name = in.readString();
+        this.status = in.readInt();
+        this.latitude = in.readDouble();
+        this.longitude = in.readDouble();
+        this.nbBixis = in.readInt();
+        this.nbDocks = in.readInt();
+    }
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeInt(status);
+        dest.writeDouble(latitude);
+        dest.writeDouble(longitude);
+        dest.writeInt(nbBixis);
+        dest.writeInt(nbDocks);
+    }
+
+    public static final Parcelable.Creator<Station> CREATOR = new Parcelable.Creator<Station>() {
+        @Override
+        public Station createFromParcel(Parcel in) {
+            return new Station(in);
+        }
+
+        @Override
+        public Station[] newArray(int size) {
+            return new Station[size];
+        }
+    };
 }

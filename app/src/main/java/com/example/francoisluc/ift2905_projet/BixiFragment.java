@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import java.util.ArrayList;
+
 /**
  * Created by François Luc on 2017-04-26.
  */
@@ -50,15 +52,21 @@ public class BixiFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         if(v == bixiListButton){
-            if(showingBixiMap == true){
+            if(showingBixiMap){
+                ArrayList<Station> stationsToShow = myGMapFragment.getStationList();
+                Bundle args = new Bundle();
+                args.putParcelableArrayList("stationsList", stationsToShow );
+                resultsListFragment.setArguments(args);
                 fragmentManager.beginTransaction().replace(R.id.bixi_content_frame, resultsListFragment).commit();
                 showingBixiMap = false;
                 bixiListButton.setImageResource(R.drawable.ic_map_black_24px);
+                bixiLocate.setVisibility(View.GONE);
             }
             else{
                 fragmentManager.beginTransaction().replace(R.id.bixi_content_frame, myGMapFragment).commit();
                 showingBixiMap = true;
                 bixiListButton.setImageResource(R.drawable.ic_list_black_24px);
+                bixiLocate.setVisibility(View.VISIBLE);
             }
         }
         if(v == bixiLocate){

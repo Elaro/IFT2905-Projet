@@ -5,12 +5,19 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.example.francoisluc.ift2905_projet.Database.StationsDB;
+import com.example.francoisluc.ift2905_projet.Database.StationsTableElement;
 
 import java.util.ArrayList;
 
 
 public class ResultsListFragment extends Fragment {
+
+    private StationsDB db;
+    private ArrayList<Station> results_list;
 
     public ResultsListFragment(){
 
@@ -19,19 +26,24 @@ public class ResultsListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        db = new StationsDB(getContext());
         View rootView = inflater.inflate(R.layout.results_list_fragment, container, false);
         ListView lv = (ListView)rootView.findViewById(R.id.result_list_view);
 
-        ArrayList<Station> results_list = new ArrayList<Station>() ;
+        Bundle args = getArguments();
+        results_list = args.getParcelableArrayList("stationsList") ;
 
-        Station st1 = new Station(11, "Édouard-Montpetit (Université de Montréal",
-                1, 0, 0, 12, 2);
-        Station st2 = new Station(12, "Louis Collin / Willowdale",
-                1,0,0,7,8);
-        results_list.add(st1);
-        results_list.add(st2);
         ResultsListAdapter adapter = new ResultsListAdapter(getContext(), results_list);
         lv.setAdapter(adapter);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Station s = results_list.get(position);
+                db.open();
+                db.insertStation(new StationsTableElement(s.getId()));
+                db.close();
+            }
+        });
         return rootView;
     }
 

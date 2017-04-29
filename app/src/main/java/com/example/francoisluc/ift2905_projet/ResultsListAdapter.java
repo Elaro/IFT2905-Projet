@@ -59,11 +59,11 @@ public class ResultsListAdapter extends BaseAdapter {
         TextView stationName = (TextView) rowView.findViewById(R.id.stationName);
         TextView nbBixis = (TextView) rowView.findViewById(R.id.nbBixis);
         TextView nbDocks = (TextView) rowView.findViewById(R.id.nbDocks);
-        ImageButton delete = (ImageButton) rowView.findViewById(R.id.delete_button);
-        delete.setOnClickListener(new View.OnClickListener() {
+        ImageButton addFav = (ImageButton) rowView.findViewById(R.id.addFav_button);
+        addFav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("i","add click");
+                v.setVisibility(View.GONE);
                 ((ListView) parent).performItemClick(v, position, 0);
             }
         });

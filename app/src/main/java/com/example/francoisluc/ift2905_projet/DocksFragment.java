@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import java.util.ArrayList;
+
 /**
  * Created by François Luc on 2017-04-26.
  */
@@ -50,15 +52,21 @@ public class DocksFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if(v == docksListButton){
-            if(showingDocksMap == true){
+            if(showingDocksMap){
+                ArrayList<Station> stationsToShow = myGMapFragmentD.getStationList();
+                Bundle args = new Bundle();
+                args.putParcelableArrayList("stationsList", stationsToShow );
+                resultsListFragmentD.setArguments(args);
                 fragmentManager.beginTransaction().replace(R.id.docks_content_frame, resultsListFragmentD).commit();
                 showingDocksMap = false;
                 docksListButton.setImageResource(R.drawable.ic_map_black_24px);
+                docksLocate.setVisibility(View.GONE);
             }
             else{
                 fragmentManager.beginTransaction().replace(R.id.docks_content_frame, myGMapFragmentD).commit();
                 showingDocksMap = true;
                 docksListButton.setImageResource(R.drawable.ic_list_black_24px);
+                docksLocate.setVisibility(View.VISIBLE);
             }
         }
         if(v == docksLocate){
