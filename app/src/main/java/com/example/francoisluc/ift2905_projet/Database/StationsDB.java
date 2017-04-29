@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.icu.text.DateFormat;
 
 /**
  * Created by Rosalie on 2017-04-06.
@@ -51,5 +52,14 @@ public class StationsDB {
     public Cursor getStations(){
         return db.query(TABLE_STATIONS, new String[] {COL_ID}, null, null, null, null, null);
 
+    }
+
+    public boolean checkIfInDatabase(int id){
+        boolean result = false;
+        Cursor c = db.query(TABLE_STATIONS, null, COL_ID + " = ?",
+                new String[] {"" + id}, null, null, null);
+        if(c.getCount() >= 1)
+            result = true;
+        return result;
     }
 }

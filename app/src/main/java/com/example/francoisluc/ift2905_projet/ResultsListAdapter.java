@@ -10,6 +10,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.francoisluc.ift2905_projet.Database.StationsDB;
+
 import java.util.ArrayList;
 
 /**
@@ -21,11 +23,13 @@ public class ResultsListAdapter extends BaseAdapter {
     private Context context;
     private LayoutInflater myInflater;
     private ArrayList<Station> dataSource;
+    private StationsDB db;
 
 
     public ResultsListAdapter(Context c, ArrayList<Station> data){
         context = c;
         dataSource = data;
+        db = new StationsDB(c);
         myInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -72,6 +76,14 @@ public class ResultsListAdapter extends BaseAdapter {
         stationName.setText(s.getName());
         nbBixis.setText("" + s.getNbBixis());
         nbDocks.setText("" + s.getNbDocks());
+
+
+        db.open();
+        boolean inFav = db.checkIfInDatabase(s.getId());
+        db.close();
+
+        if(inFav)
+            addFav.setVisibility(View.GONE);
 
         return rowView;
     }
