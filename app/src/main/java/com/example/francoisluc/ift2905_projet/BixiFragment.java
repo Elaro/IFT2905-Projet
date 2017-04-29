@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,7 @@ public class BixiFragment extends Fragment implements View.OnClickListener{
     EditText bixiLocation;
     ImageButton bixiLocate, bixiListButton;
     boolean showingBixiMap;
-    MyGMapFragment myGMapFragment;
+    MyGMapFragmentBixi myGMapFragmentBixi;
     ResultsListFragment resultsListFragment;
     FragmentManager fragmentManager;
 
@@ -34,7 +33,7 @@ public class BixiFragment extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.content_bixi, container, false);
-        myGMapFragment = new MyGMapFragment();
+        myGMapFragmentBixi = new MyGMapFragmentBixi();
         resultsListFragment = new ResultsListFragment();
         bixiLocation = (EditText) v.findViewById(R.id.bixilocationtextView);
         bixiLocate = (ImageButton) v.findViewById(R.id.bixibutton);
@@ -44,7 +43,7 @@ public class BixiFragment extends Fragment implements View.OnClickListener{
         showingBixiMap=true;
 
         fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.bixi_content_frame, myGMapFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.bixi_content_frame, myGMapFragmentBixi).commit();
 
         return v;
     }
@@ -53,7 +52,7 @@ public class BixiFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         if(v == bixiListButton){
             if(showingBixiMap){
-                ArrayList<Station> stationsToShow = myGMapFragment.getStationList();
+                ArrayList<Station> stationsToShow = myGMapFragmentBixi.getStationList();
                 Bundle args = new Bundle();
                 args.putParcelableArrayList("stationsList", stationsToShow );
                 resultsListFragment.setArguments(args);
@@ -63,14 +62,14 @@ public class BixiFragment extends Fragment implements View.OnClickListener{
                 bixiLocate.setVisibility(View.GONE);
             }
             else{
-                fragmentManager.beginTransaction().replace(R.id.bixi_content_frame, myGMapFragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.bixi_content_frame, myGMapFragmentBixi).commit();
                 showingBixiMap = true;
                 bixiListButton.setImageResource(R.drawable.ic_list_black_24px);
                 bixiLocate.setVisibility(View.VISIBLE);
             }
         }
         if(v == bixiLocate){
-                myGMapFragment.findAddress(bixiLocation.getText().toString());
+                myGMapFragmentBixi.findAddress(bixiLocation.getText().toString());
         }
     }
 }

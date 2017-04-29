@@ -17,7 +17,7 @@ import android.widget.ImageButton;
 public class ItineraryFragment extends Fragment implements View.OnClickListener{
     EditText itinStartLocation, itinDestLocation;
     ImageButton itinerary;
-    MyGMapFragment mapFrag;
+    MyGMapFragmentBixi mapFrag;
     FragmentManager fragmentManager;
 
     public ItineraryFragment()
@@ -29,7 +29,7 @@ public class ItineraryFragment extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.content_itinerary, container, false);
-        mapFrag = new MyGMapFragment();
+        mapFrag = new MyGMapFragmentBixi();
         itinStartLocation = (EditText) v.findViewById(R.id.starttextView);
         itinDestLocation = (EditText) v.findViewById(R.id.desttextView);
         itinerary = (ImageButton) v.findViewById(R.id.itinerarybutton);

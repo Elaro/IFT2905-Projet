@@ -31,12 +31,12 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class MyGMapFragment extends Fragment implements OnMapReadyCallback {
+public class MyGMapFragmentBixi extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap map;
     private ArrayList<Marker> markers = new ArrayList<>();
 
-    public MyGMapFragment() {
+    public MyGMapFragmentBixi() {
     }
 
     @Override
@@ -137,20 +137,19 @@ public class MyGMapFragment extends Fragment implements OnMapReadyCallback {
             super.onProgressUpdate(st);
             IconGenerator iconFactory = new IconGenerator(getContext());
             Drawable drawable;
-
             Station s = st[0];
+
             if(s.getNbBixis() == 0)
                 drawable = getContext().getResources().getDrawable(R.drawable.ic_bixi_marker_red);
             else
                 drawable = getContext().getResources().getDrawable(R.drawable.ic_bixi_marker_green);
-
             iconFactory.setBackground(drawable);
 
             Marker m = map.addMarker(new MarkerOptions()
                     .icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon("" + s.getNbBixis())))
                     .position(new LatLng(s.getLatitude(),s.getLongitude()))
                     .title(s.getName()));
-            m.setTag(st);
+            m.setTag(s);
 
             markers.add(m);
 

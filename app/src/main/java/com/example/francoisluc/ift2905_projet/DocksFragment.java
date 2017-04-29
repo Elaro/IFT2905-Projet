@@ -20,7 +20,7 @@ public class DocksFragment extends Fragment implements View.OnClickListener {
     EditText docksLocation;
     ImageButton docksLocate, docksListButton;
     boolean showingDocksMap;
-    MyGMapFragment myGMapFragmentD;
+    MyGMapFragmentDock myGMapFragmentD;
     ResultsListFragment resultsListFragmentD;
     FragmentManager fragmentManager;
 
@@ -34,7 +34,7 @@ public class DocksFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.content_docks, container, false);
-        myGMapFragmentD = new MyGMapFragment();
+        myGMapFragmentD = new MyGMapFragmentDock();
         resultsListFragmentD = new ResultsListFragment();
         docksLocation = (EditText) view.findViewById(R.id.dockslocationtextView);
         docksLocate = (ImageButton) view.findViewById(R.id.docksbutton);
