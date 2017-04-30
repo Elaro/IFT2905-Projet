@@ -1,15 +1,21 @@
 package com.example.francoisluc.ift2905_projet;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.AsyncTask;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -35,6 +41,7 @@ public class MyGMapFragmentBixi extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap map;
     private ArrayList<Marker> markers = new ArrayList<>();
+    final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
     public MyGMapFragmentBixi() {
     }
@@ -50,7 +57,7 @@ public class MyGMapFragmentBixi extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState){
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         SupportMapFragment map = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapF);
         map.getMapAsync(this);
@@ -60,11 +67,42 @@ public class MyGMapFragmentBixi extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         map.getUiSettings().setMapToolbarEnabled(false);
+
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            map.setMyLocationEnabled(true);
+            map.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+                @Override
+                public boolean onMyLocationButtonClick() {
+                    Location loc = map.getMyLocation();
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(loc.getLatitude(),
+                           loc.getLongitude()), 17));
+                    return true;
+                }
+            });
+        } else {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        }
         //add marker here
         new AddMarker().execute();
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //This double check is useless, but android give an error if i don't add it...
+                    if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED)
+                    map.setMyLocationEnabled(true);
+                }
+            }
+        }
+    }
 
     public void findAddress(String address){
         Geocoder geocoder = new Geocoder(getContext(), Locale.CANADA_FRENCH);
