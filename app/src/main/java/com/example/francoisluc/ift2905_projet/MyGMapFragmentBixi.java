@@ -59,9 +59,12 @@ public class MyGMapFragmentBixi extends Fragment implements OnMapReadyCallback {
 
         //add marker here
         new AddMarker().execute();
-
     }
 
+    public void setOnInfoClickListener(GoogleMap.OnInfoWindowClickListener onInfoClickListener)
+    {
+        map.setOnInfoWindowClickListener(onInfoClickListener);
+    }
 
     public void findAddress(String address){
         Geocoder geocoder = new Geocoder(getContext(), Locale.CANADA_FRENCH);
@@ -156,7 +159,7 @@ public class MyGMapFragmentBixi extends Fragment implements OnMapReadyCallback {
 
         @Override
         protected  void onPostExecute(Void v) {
-            map.setOnInfoWindowClickListener((BixiFragment)getParentFragment());
+
         }
     }
 }

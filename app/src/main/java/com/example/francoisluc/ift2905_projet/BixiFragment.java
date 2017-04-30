@@ -19,7 +19,7 @@ import java.util.ArrayList;
  * Created by François Luc on 2017-04-26.
  */
 
-public class BixiFragment extends Fragment implements View.OnClickListener, GoogleMap.OnInfoWindowClickListener{
+public class BixiFragment extends Fragment implements View.OnClickListener /*, GoogleMap.OnInfoWindowClickListener*/{
     EditText bixiLocation;
     ImageButton bixiLocate, bixiListButton;
     boolean showingBixiMap;
@@ -48,6 +48,7 @@ public class BixiFragment extends Fragment implements View.OnClickListener, Goog
 
         fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.bixi_content_frame, myGMapFragmentBixi).commit();
+    //    myGMapFragmentBixi.setOnInfoClickListener(this);
 
         return v;
 
@@ -79,7 +80,7 @@ public class BixiFragment extends Fragment implements View.OnClickListener, Goog
         }
     }
 
-    @Override
+/*    @Override
     public void onInfoWindowClick(Marker marker) {
         ArrayList<Station> stationsToShow= new ArrayList<Station>();
         stationsToShow.add((Station) marker.getTag());
@@ -90,5 +91,5 @@ public class BixiFragment extends Fragment implements View.OnClickListener, Goog
         showingBixiMap = false;
         bixiListButton.setImageResource(R.drawable.ic_map_black_24px);
         bixiLocate.setVisibility(View.GONE);
-    }
+    }*/
 }
