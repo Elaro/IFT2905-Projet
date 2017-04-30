@@ -113,7 +113,7 @@ public class MyGMapFragmentBixi extends Fragment implements OnMapReadyCallback {
                 Address a = result.get(0);
                 map.addMarker(new MarkerOptions()
                         .position(new LatLng(a.getLatitude(),a.getLongitude()))
-                        .title("Me")
+                        .title(a.getAddressLine(0))
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(a.getLatitude(),a.getLongitude()), 17));
             }
@@ -175,16 +175,24 @@ public class MyGMapFragmentBixi extends Fragment implements OnMapReadyCallback {
             super.onProgressUpdate(st);
             IconGenerator iconFactory = new IconGenerator(getContext());
             Drawable drawable;
+            String number = "";
             Station s = st[0];
 
-            if(s.getNbBixis() == 0)
+            if(s.getStatus() == 2){
+                drawable = getContext().getResources().getDrawable(R.drawable.ic_marker_gray);
+            }
+            else if(s.getNbBixis() == 0) {
                 drawable = getContext().getResources().getDrawable(R.drawable.ic_bixi_marker_red);
-            else
+                number += s.getNbBixis();
+            }
+            else {
                 drawable = getContext().getResources().getDrawable(R.drawable.ic_bixi_marker_green);
+                number += s.getNbBixis();
+            }
             iconFactory.setBackground(drawable);
 
             Marker m = map.addMarker(new MarkerOptions()
-                    .icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon("" + s.getNbBixis())))
+                    .icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(number)))
                     .position(new LatLng(s.getLatitude(),s.getLongitude()))
                     .title(s.getName()));
             m.setTag(s);
