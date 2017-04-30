@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -36,6 +37,7 @@ public class MyGMapFragmentDock extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap map;
     private ArrayList<Marker> markers = new ArrayList<>();
+    private Marker mySearch;
 
     public MyGMapFragmentDock() {
     }
@@ -84,10 +86,16 @@ public class MyGMapFragmentDock extends Fragment implements OnMapReadyCallback {
         Geocoder geocoder = new Geocoder(getContext(), Locale.CANADA_FRENCH);
         try {
             List<Address> result = geocoder.getFromLocationName(address, 1);
-            if(result == null || result.isEmpty());
+            if(result == null || result.isEmpty()) {
+                Toast toast = Toast.makeText(getContext(), "Invalid address", Toast.LENGTH_LONG);
+                toast.show();
+            }
             else{
                 Address a = result.get(0);
-                map.addMarker(new MarkerOptions()
+                if(mySearch != null){
+                    mySearch.remove();
+                }
+                mySearch = map.addMarker(new MarkerOptions()
                         .position(new LatLng(a.getLatitude(),a.getLongitude()))
                         .title(a.getAddressLine(0))
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));

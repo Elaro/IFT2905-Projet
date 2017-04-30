@@ -14,8 +14,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.google.android.gms.maps.CameraUpdate;
+import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -26,11 +25,9 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.ui.IconGenerator;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +39,7 @@ public class MyGMapFragmentBixi extends Fragment implements OnMapReadyCallback {
     private GoogleMap map;
     private ArrayList<Marker> markers = new ArrayList<>();
     final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    private Marker mySearch;
 
     public MyGMapFragmentBixi() {
     }
@@ -108,10 +106,16 @@ public class MyGMapFragmentBixi extends Fragment implements OnMapReadyCallback {
         Geocoder geocoder = new Geocoder(getContext(), Locale.CANADA_FRENCH);
         try {
             List<Address> result = geocoder.getFromLocationName(address, 1);
-            if(result == null || result.isEmpty());
+            if(result == null || result.isEmpty()){
+                Toast toast = Toast.makeText(getContext(), "Invalid address", Toast.LENGTH_LONG);
+                toast.show();
+            }
             else{
                 Address a = result.get(0);
-                map.addMarker(new MarkerOptions()
+                if(mySearch != null){
+                    mySearch.remove();
+                }
+                mySearch = map.addMarker(new MarkerOptions()
                         .position(new LatLng(a.getLatitude(),a.getLongitude()))
                         .title(a.getAddressLine(0))
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
