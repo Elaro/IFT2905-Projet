@@ -72,17 +72,24 @@ public class ResultsListAdapterDock extends BaseAdapter {
             }
         });
 
+        String text;
 
-        stationName.setText(s.getName());
+        if(s.getStatus() == 2){
+            stationName.setTextColor(Color.parseColor(("#999999")));
+            text = s.getName() + " (INACTIVE)";
+        }
+        else if(s.getNbDocks() == 0){
+            stationName.setTextColor(Color.parseColor("#F20707"));
+            text = s.getName();
+        }
+        else{
+            stationName.setTextColor(Color.parseColor("#06BC66"));
+            text = s.getName();
+        }
+
+        stationName.setText(text);
         nbBixis.setText("" + s.getNbBixis());
         nbDocks.setText("" + s.getNbDocks());
-
-        if(s.getNbDocks() == 0){
-            stationName.setTextColor(Color.parseColor("#F20707"));
-        }
-        else
-            stationName.setTextColor(Color.parseColor("#06BC66"));
-
 
         db.open();
         boolean inFav = db.checkIfInDatabase(s.getId());

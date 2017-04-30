@@ -1,6 +1,7 @@
 package com.example.francoisluc.ift2905_projet;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,10 +70,18 @@ public class FavoritesAdapter extends BaseAdapter {
             }
         });
 
+        String text;
+        if(s.getStatus() == 2){
+            text = s.getName() + " (INACTIVE)";
+            stationName.setTextColor(Color.parseColor("#999999"));
+        }
+        else
+            text = s.getName();
 
-        stationName.setText(s.getName());
+        stationName.setText(text);
         nbBixis.setText("" + s.getNbBixis());
         nbDocks.setText("" + s.getNbDocks());
+
 
         return rowView;
     }
