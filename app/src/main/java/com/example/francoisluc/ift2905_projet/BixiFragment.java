@@ -10,13 +10,16 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.Marker;
+
 import java.util.ArrayList;
 
 /**
  * Created by François Luc on 2017-04-26.
  */
 
-public class BixiFragment extends Fragment implements View.OnClickListener{
+public class BixiFragment extends Fragment implements View.OnClickListener, GoogleMap.OnInfoWindowClickListener{
     EditText bixiLocation;
     ImageButton bixiLocate, bixiListButton;
     boolean showingBixiMap;
@@ -25,9 +28,9 @@ public class BixiFragment extends Fragment implements View.OnClickListener{
     FragmentManager fragmentManager;
     final private int mode = 1;
 
-    public BixiFragment()
-    {
-        super();
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Nullable
@@ -47,6 +50,7 @@ public class BixiFragment extends Fragment implements View.OnClickListener{
         fragmentManager.beginTransaction().replace(R.id.bixi_content_frame, myGMapFragmentBixi).commit();
 
         return v;
+
     }
 
     @Override
@@ -73,5 +77,18 @@ public class BixiFragment extends Fragment implements View.OnClickListener{
         if(v == bixiLocate){
                 myGMapFragmentBixi.findAddress(bixiLocation.getText().toString());
         }
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        ArrayList<Station> stationsToShow= new ArrayList<Station>();
+        stationsToShow.add((Station) marker.getTag());
+        Bundle args = new Bundle();
+        args.putParcelableArrayList("stationsList", stationsToShow );
+        resultsListFragment.setArguments(args);
+        fragmentManager.beginTransaction().replace(R.id.bixi_content_frame, resultsListFragment).commit();
+        showingBixiMap = false;
+        bixiListButton.setImageResource(R.drawable.ic_map_black_24px);
+        bixiLocate.setVisibility(View.GONE);
     }
 }

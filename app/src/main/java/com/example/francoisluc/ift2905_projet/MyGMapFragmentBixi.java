@@ -1,20 +1,15 @@
 package com.example.francoisluc.ift2905_projet;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.os.AsyncTask;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -25,9 +20,11 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.ui.IconGenerator;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,15 +35,9 @@ public class MyGMapFragmentBixi extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap map;
     private ArrayList<Marker> markers = new ArrayList<>();
-    final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    private Marker mySearch;
 
     public MyGMapFragmentBixi() {
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super();
     }
 
     @Override
@@ -55,7 +46,7 @@ public class MyGMapFragmentBixi extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
         SupportMapFragment map = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapF);
         map.getMapAsync(this);
@@ -66,58 +57,22 @@ public class MyGMapFragmentBixi extends Fragment implements OnMapReadyCallback {
         map = googleMap;
         map.getUiSettings().setMapToolbarEnabled(false);
 
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            map.setMyLocationEnabled(true);
-            map.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
-                @Override
-                public boolean onMyLocationButtonClick() {
-                    Location loc = map.getMyLocation();
-                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(loc.getLatitude(),
-                           loc.getLongitude()), 17));
-                    return true;
-                }
-            });
-        } else {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-        }
         //add marker here
         new AddMarker().execute();
 
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //This double check is useless, but android give an error if i don't add it...
-                    if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                            == PackageManager.PERMISSION_GRANTED)
-                    map.setMyLocationEnabled(true);
-                }
-            }
-        }
-    }
 
     public void findAddress(String address){
         Geocoder geocoder = new Geocoder(getContext(), Locale.CANADA_FRENCH);
         try {
             List<Address> result = geocoder.getFromLocationName(address, 1);
-            if(result == null || result.isEmpty()){
-                Toast toast = Toast.makeText(getContext(), "Invalid address", Toast.LENGTH_LONG);
-                toast.show();
-            }
+            if(result == null || result.isEmpty());
             else{
                 Address a = result.get(0);
-                if(mySearch != null){
-                    mySearch.remove();
-                }
-                mySearch = map.addMarker(new MarkerOptions()
+                map.addMarker(new MarkerOptions()
                         .position(new LatLng(a.getLatitude(),a.getLongitude()))
-                        .title(a.getAddressLine(0))
+                        .title("Me")
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(a.getLatitude(),a.getLongitude()), 17));
             }
@@ -140,6 +95,7 @@ public class MyGMapFragmentBixi extends Fragment implements OnMapReadyCallback {
         }
         return stations;
     }
+
 
 
     private class AddMarker extends AsyncTask<Void, Station, Void>{
@@ -179,26 +135,19 @@ public class MyGMapFragmentBixi extends Fragment implements OnMapReadyCallback {
             super.onProgressUpdate(st);
             IconGenerator iconFactory = new IconGenerator(getContext());
             Drawable drawable;
-            String number = "";
             Station s = st[0];
 
-            if(s.getStatus() == 2){
-                drawable = getContext().getResources().getDrawable(R.drawable.ic_marker_gray);
-            }
-            else if(s.getNbBixis() == 0) {
+            if(s.getNbBixis() == 0)
                 drawable = getContext().getResources().getDrawable(R.drawable.ic_bixi_marker_red);
-                number += s.getNbBixis();
-            }
-            else {
+            else
                 drawable = getContext().getResources().getDrawable(R.drawable.ic_bixi_marker_green);
-                number += s.getNbBixis();
-            }
             iconFactory.setBackground(drawable);
 
             Marker m = map.addMarker(new MarkerOptions()
-                    .icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(number)))
+                    .icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon("" + s.getNbBixis())))
                     .position(new LatLng(s.getLatitude(),s.getLongitude()))
-                    .title(s.getName()));
+                    .title(s.getName())
+            .snippet("bixi:"+s.getNbBixis()+" || "+"docks:"+s.getNbDocks()));
             m.setTag(s);
 
             markers.add(m);
@@ -207,7 +156,7 @@ public class MyGMapFragmentBixi extends Fragment implements OnMapReadyCallback {
 
         @Override
         protected  void onPostExecute(Void v) {
-
+            map.setOnInfoWindowClickListener((BixiFragment)getParentFragment());
         }
     }
 }
