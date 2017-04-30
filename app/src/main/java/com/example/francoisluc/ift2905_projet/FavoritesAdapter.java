@@ -72,7 +72,7 @@ public class FavoritesAdapter extends BaseAdapter {
 
         String text;
         if(s.getStatus() == 2){
-            text = s.getName() + " (INACTIVE)";
+            text = s.getName() + " (OUT OF SERVICE)";
             stationName.setTextColor(Color.parseColor("#999999"));
         }
         else

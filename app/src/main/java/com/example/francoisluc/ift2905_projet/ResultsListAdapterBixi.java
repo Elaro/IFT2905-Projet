@@ -75,7 +75,7 @@ public class ResultsListAdapterBixi extends BaseAdapter {
         String text;
         if(s.getStatus() == 2){
             stationName.setTextColor(Color.parseColor(("#999999")));
-            text = s.getName() + " (INACTIVE)";
+            text = s.getName() + " (OUT OF SERVICE)";
         }
         else if(s.getNbBixis() == 0){
             stationName.setTextColor(Color.parseColor("#F20707"));

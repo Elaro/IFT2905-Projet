@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BIXI</string>
+    <string name="app_name">App Bixi</string>
     <string name="title_activity_main">App Bixi</string>
 
     <string name="docks_button">Locate</string>
