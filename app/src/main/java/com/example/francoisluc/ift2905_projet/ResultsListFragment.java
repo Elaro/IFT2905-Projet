@@ -18,6 +18,7 @@ public class ResultsListFragment extends Fragment {
 
     private StationsDB db;
     private ArrayList<Station> results_list;
+    private int mode;
 
     public ResultsListFragment(){
 
@@ -32,9 +33,15 @@ public class ResultsListFragment extends Fragment {
 
         Bundle args = getArguments();
         results_list = args.getParcelableArrayList("stationsList") ;
-
-        ResultsListAdapter adapter = new ResultsListAdapter(getContext(), results_list);
-        lv.setAdapter(adapter);
+        mode = args.getInt("mode");
+        if(mode == 1){
+            ResultsListAdapterBixi adapter = new ResultsListAdapterBixi(getContext(), results_list);
+            lv.setAdapter(adapter);
+        }
+        else if(mode == 2){
+            ResultsListAdapterDock adapter = new ResultsListAdapterDock(getContext(), results_list);
+            lv.setAdapter(adapter);
+        }
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

@@ -23,6 +23,7 @@ public class DocksFragment extends Fragment implements View.OnClickListener {
     MyGMapFragmentDock myGMapFragmentD;
     ResultsListFragment resultsListFragmentD;
     FragmentManager fragmentManager;
+    final private int mode = 2;
 
     public DocksFragment()
     {
@@ -56,6 +57,7 @@ public class DocksFragment extends Fragment implements View.OnClickListener {
                 ArrayList<Station> stationsToShow = myGMapFragmentD.getStationList();
                 Bundle args = new Bundle();
                 args.putParcelableArrayList("stationsList", stationsToShow );
+                args.putInt("mode", mode);
                 resultsListFragmentD.setArguments(args);
                 fragmentManager.beginTransaction().replace(R.id.docks_content_frame, resultsListFragmentD).commit();
                 showingDocksMap = false;

@@ -1,7 +1,7 @@
 package com.example.francoisluc.ift2905_projet;
 
 import android.content.Context;
-import android.util.Log;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +15,10 @@ import com.example.francoisluc.ift2905_projet.Database.StationsDB;
 import java.util.ArrayList;
 
 /**
- * Created by Rosalie on 2017-04-26.
+ * Created by Rosalie on 2017-04-30.
  */
 
-public class ResultsListAdapter extends BaseAdapter {
+public class ResultsListAdapterBixi extends BaseAdapter {
 
     private Context context;
     private LayoutInflater myInflater;
@@ -26,7 +26,7 @@ public class ResultsListAdapter extends BaseAdapter {
     private StationsDB db;
 
 
-    public ResultsListAdapter(Context c, ArrayList<Station> data){
+    public ResultsListAdapterBixi(Context c, ArrayList<Station> data){
         context = c;
         dataSource = data;
         db = new StationsDB(c);
@@ -76,7 +76,11 @@ public class ResultsListAdapter extends BaseAdapter {
         stationName.setText(s.getName());
         nbBixis.setText("" + s.getNbBixis());
         nbDocks.setText("" + s.getNbDocks());
-
+        if(s.getNbBixis() == 0){
+            stationName.setTextColor(Color.parseColor("#F20707"));
+        }
+        else
+            stationName.setTextColor(Color.parseColor("#06BC66"));
 
         db.open();
         boolean inFav = db.checkIfInDatabase(s.getId());

@@ -23,6 +23,7 @@ public class BixiFragment extends Fragment implements View.OnClickListener{
     MyGMapFragmentBixi myGMapFragmentBixi;
     ResultsListFragment resultsListFragment;
     FragmentManager fragmentManager;
+    final private int mode = 1;
 
     public BixiFragment()
     {
@@ -55,6 +56,7 @@ public class BixiFragment extends Fragment implements View.OnClickListener{
                 ArrayList<Station> stationsToShow = myGMapFragmentBixi.getStationList();
                 Bundle args = new Bundle();
                 args.putParcelableArrayList("stationsList", stationsToShow );
+                args.putInt("mode", mode);
                 resultsListFragment.setArguments(args);
                 fragmentManager.beginTransaction().replace(R.id.bixi_content_frame, resultsListFragment).commit();
                 showingBixiMap = false;

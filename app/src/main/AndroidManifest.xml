@@ -22,7 +22,7 @@
         </activity>
         <activity
             android:name=".FavoritesActivity"
-            android:label="Favoris"
+            android:label="Favorites"
             android:theme="@style/AppTheme.NoActionBar">
             android:parentActivityName="com.example.francoisluc.ift2905_projet.MainActivity" >
 
