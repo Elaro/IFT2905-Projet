@@ -10,9 +10,6 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
-
-import com.example.francoisluc.ift2905_projet.Database.StationsTableElement;
 import com.example.francoisluc.ift2905_projet.Database.StationsDB;
 
 import java.util.ArrayList;
@@ -43,13 +40,6 @@ public class FavoritesActivity extends AppCompatActivity {
         db = new StationsDB(this);
         json = new JsonHelper("https://secure.bixi.com/data/stations.json");
 
-        ////////TEST : add stations in favorite database
-       // db.open();
-       // db.insertStation(new StationsTableElement(1));
-        //db.insertStation(new StationsTableElement(3));
-        //db.close();
-        ////////////////////
-
         //Create ListView
         listView = (ListView) findViewById(R.id.favorite_list_view);
 
@@ -79,7 +69,6 @@ public class FavoritesActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.favorites_menu, menu);
         return true;
     }
@@ -94,7 +83,6 @@ public class FavoritesActivity extends AppCompatActivity {
         if(c.getCount() != 0){
             while(c.moveToNext()) {
                 int id = c.getInt(0);
-                //Station st = new Station(id); inutile pour ancien test
                 ArrayList<Station> stArray = json.getStationById(id);
                 if(stArray != null){
                     Station st = stArray.get(0);

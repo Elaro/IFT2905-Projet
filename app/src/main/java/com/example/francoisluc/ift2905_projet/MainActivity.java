@@ -16,7 +16,6 @@ import com.example.francoisluc.ift2905_projet.Database.StationsDB;
 
 public class MainActivity extends AppCompatActivity {
 
-    private StationsDB database;
     private TabLayout mainhost;
     private ViewPager pager;
     private PagerAdapter pagerAdapter;
@@ -28,9 +27,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        //Create database
-        database = new StationsDB(this);
 
         mainhost = (TabLayout) findViewById(R.id.tab_layout);
         pager = (ViewPager)findViewById(R.id.pager);

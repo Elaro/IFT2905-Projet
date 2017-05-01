@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.icu.text.DateFormat;
 
 /**
  * Created by Rosalie on 2017-04-06.
