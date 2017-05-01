@@ -4,7 +4,9 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -20,10 +22,16 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.ui.IconGenerator;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -41,6 +49,7 @@ public class ItineraryTask extends Fragment implements OnMapReadyCallback, Direc
         private List<Polyline> polylinePaths = new ArrayList<>();
         private ProgressDialog progressDialog;
         final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+        private ArrayList<Station> stationList = new ArrayList<>();
 
     public ItineraryTask() {}
 
@@ -66,19 +75,22 @@ public class ItineraryTask extends Fragment implements OnMapReadyCallback, Direc
         gMap = googleMap;
         gMap.getUiSettings().setMapToolbarEnabled(false);
 
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            gMap.setMyLocationEnabled(true);
+            gMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+                @Override
+                public boolean onMyLocationButtonClick() {
+                    Location loc = gMap.getMyLocation();
+                    gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(loc.getLatitude(),
+                            loc.getLongitude()), 17));
+                    return true;
+                }
+            });
         }
-        gMap.setMyLocationEnabled(true);
-
+        new GetStations().execute();
     }
+
     public void sendRequest(EditText itinStartLocation, EditText itinDestLocation){
         String origin = itinStartLocation.getText().toString();
         String destination = itinDestLocation.getText().toString();
@@ -122,7 +134,7 @@ public class ItineraryTask extends Fragment implements OnMapReadyCallback, Direc
         destinationMarkers = new ArrayList<>();
 
         for (Route route : routes) {
-            gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
+            //gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
             //((TextView) findViewById(R.id.tvDuration)).setText(route.duration.text);
             //((TextView) findViewById(R.id.tvDistance)).setText(route.distance.text);
 
@@ -130,10 +142,19 @@ public class ItineraryTask extends Fragment implements OnMapReadyCallback, Direc
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
                     .title(route.startAddress)
                     .position(route.startLocation)));
+            gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
+            //add bixi
+            addStationMarker(true);
+
             destinationMarkers.add(gMap.addMarker(new MarkerOptions()
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
                     .title(route.endAddress)
                     .position(route.endLocation)));
+            gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.endLocation, 16));
+            //add dock
+            addStationMarker(false);
+
+            gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
 
             PolylineOptions polylineOptions = new PolylineOptions().
                     geodesic(true).
@@ -144,9 +165,115 @@ public class ItineraryTask extends Fragment implements OnMapReadyCallback, Direc
                 polylineOptions.add(route.points.get(i));
 
             polylinePaths.add(gMap.addPolyline(polylineOptions));
+
         }
     }
 
+    public void addStationMarker(boolean start){
 
+        LatLngBounds latLongBounds = gMap.getProjection().getVisibleRegion().latLngBounds;
+
+        for(int i = 0; i < stationList.size(); i++){
+            Station s = stationList.get(i);
+            LatLng ll = new LatLng(s.getLatitude(),s.getLongitude());
+            if(latLongBounds.contains(ll)){
+                if(start)
+                    addBixiMarker(s, ll);
+                else
+                    addDockMarker(s, ll);
+            }
+        }
+    }
+
+    private void addBixiMarker(Station s, LatLng ll){
+        IconGenerator iconFactory = new IconGenerator(getContext());
+        Drawable drawable;
+        String number = "";
+
+        if(s.getStatus() == 2){
+            drawable = getContext().getResources().getDrawable(R.drawable.ic_marker_gray);
+        }
+        else if(s.getNbBixis() == 0) {
+            drawable = getContext().getResources().getDrawable(R.drawable.ic_bixi_marker_red);
+            number += s.getNbBixis();
+        }
+        else {
+            drawable = getContext().getResources().getDrawable(R.drawable.ic_bixi_marker_green);
+            number += s.getNbBixis();
+        }
+        iconFactory.setBackground(drawable);
+
+        gMap.addMarker(new MarkerOptions()
+                .icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(number)))
+                .position(ll)
+                .title(s.getName())
+                .snippet("bixi:"+s.getNbBixis()+" || "+"docks:"+s.getNbDocks()));
+
+    }
+
+    private void addDockMarker(Station s, LatLng ll){
+        IconGenerator iconFactory = new IconGenerator(getContext());
+        Drawable drawable;
+        String number = "";
+
+        if(s.getStatus() == 2){
+            drawable = getContext().getResources().getDrawable(R.drawable.ic_marker_gray);
+        }
+        else if(s.getNbBixis() == 0) {
+            drawable = getContext().getResources().getDrawable(R.drawable.ic_dock_marker_red);
+            number += s.getNbDocks();
+        }
+        else {
+            drawable = getContext().getResources().getDrawable(R.drawable.ic_dock_marker_green);
+            number += s.getNbDocks();
+        }
+        iconFactory.setBackground(drawable);
+
+        gMap.addMarker(new MarkerOptions()
+                .icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(number)))
+                .position(ll)
+                .title(s.getName())
+                .snippet("bixi:"+s.getNbBixis()+" || "+"docks:"+s.getNbDocks()));
+
+
+    }
+
+    private class GetStations extends AsyncTask<Void, Void, ArrayList<Station>> {
+
+        @Override
+        protected ArrayList<Station> doInBackground(Void... params) {
+            HttpHandler sh = new HttpHandler();
+            String jsonStr = sh.makeServiceCall("https://secure.bixi.com/data/stations.json");
+            ArrayList<Station> list = new ArrayList<>();
+
+            try {
+                JSONObject fullJSON = new JSONObject(jsonStr);
+                JSONArray jsonStationArray = fullJSON.getJSONArray("stations");
+
+                for(int i = 0; i < jsonStationArray.length(); i++){
+
+                    JSONObject stationI = jsonStationArray.getJSONObject(i);
+
+                    int sId = stationI.getInt("id");
+                    String sName = stationI.getString("s");
+                    int sStatus = stationI.getInt("st");
+                    double sLat = stationI.getDouble("la");
+                    double sLon = stationI.getDouble("lo");
+                    int sNbBixi = stationI.getInt("ba");
+                    int sNbDock = stationI.getInt("da");
+
+                    Station st = new Station(sId, sName, sStatus, sLat, sLon, sNbBixi, sNbDock);
+                    list.add(st);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return list;
+        }
+        @Override
+        protected  void onPostExecute(ArrayList<Station> list) {
+            stationList = list;
+        }
+    }
 
 }
