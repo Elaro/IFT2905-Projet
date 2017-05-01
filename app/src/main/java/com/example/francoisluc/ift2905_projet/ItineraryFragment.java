@@ -17,8 +17,10 @@ import android.widget.ImageButton;
 public class ItineraryFragment extends Fragment implements View.OnClickListener{
     EditText itinStartLocation, itinDestLocation;
     ImageButton itinerary;
-    MyGMapFragmentBixi mapFrag;
     FragmentManager fragmentManager;
+    ItineraryTask StartDestIti;
+
+    //private GoogleMap itiMap;
 
     public ItineraryFragment()
     {
@@ -29,19 +31,21 @@ public class ItineraryFragment extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.content_itinerary, container, false);
-        mapFrag = new MyGMapFragmentBixi();
+        StartDestIti = new ItineraryTask();
+
         itinStartLocation = (EditText) v.findViewById(R.id.starttextView);
         itinDestLocation = (EditText) v.findViewById(R.id.desttextView);
         itinerary = (ImageButton) v.findViewById(R.id.itinerarybutton);
         itinerary.setOnClickListener(this);
 
         fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.itinerary_content_frame, mapFrag).commit();
+        fragmentManager.beginTransaction().replace(R.id.itinerary_content_frame, StartDestIti).commit();
         return v;
     }
 
     @Override
     public void onClick(View v) {
-
+        StartDestIti.sendRequest(itinStartLocation, itinDestLocation);
     }
+
 }
