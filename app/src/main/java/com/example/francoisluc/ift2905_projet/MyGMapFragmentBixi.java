@@ -198,7 +198,8 @@ public class MyGMapFragmentBixi extends Fragment implements OnMapReadyCallback {
             Marker m = map.addMarker(new MarkerOptions()
                     .icon(BitmapDescriptorFactory.fromBitmap(iconFactory.makeIcon(number)))
                     .position(new LatLng(s.getLatitude(),s.getLongitude()))
-                    .title(s.getName()));
+                    .title(s.getName())
+                    .snippet("bixi:"+s.getNbBixis()+" || "+"docks:"+s.getNbDocks()));
             m.setTag(s);
 
             markers.add(m);
